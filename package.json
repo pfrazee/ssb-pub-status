@@ -1,0 +1,23 @@
+{
+  "name": "ssb-pub-status",
+  "description": "a status-page server for ssb pub hosts",
+  "version": "1.0.0",
+  "homepage": "https://github.com/pfraze/ssb-pub-status",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pfraze/ssb-pub-status.git"
+  },
+  "dependencies": {
+    "explain-error": "~1.0.1",
+    "minimist": "~1.1.0",
+    "multicb": "^1.0.0",
+    "non-private-ip": "~1.1.0",
+    "rc": "~0.5.4",
+    "ssb-keys": "~0.4.1",
+    "scuttlebot": "1.2.0"
+  },
+  "devDependencies": {
+  },
+  "author": "Paul Frazee <pfrazee@gmail.com>",
+  "license": "MIT"
+}
