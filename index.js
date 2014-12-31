@@ -3,6 +3,7 @@ var path     = require('path')
 var explain  = require('explain-error')
 var manifest = require('scuttlebot/lib/manifest')
 var http     = require('http')
+var pull     = require('pull-stream')
 var config   = require('./config')
 
 var keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
@@ -25,16 +26,33 @@ rpc.auth(ssbKeys.signObj(keys, {
 
   http.createServer(onRequest).listen(config.port)
   console.log('listening on', config.port)
+
+  pull(rpc.createHistoryStream(keys.id, 0, true), pull.drain(function(msg) {
+    var d = new Date(msg.timestamp)
+    var datestr = '<strong>'+(d.getMonth()+1)+'/'+pad0(d.getDate())+' '+d.getHours()+':'+pad0(d.getMinutes())+'</strong>\n\n'
+    if (msg.content.type == 'post' && msg.content.postType == 'text') {
+      msgs.unshift(datestr + msg.content.text)
+    }
+  }, console.log))
 })
 
 var banner = [
   '<strong>Hello world, I am '+keys.id+'</strong>',
   'this pub server is running <a href="https://github.com/ssbc/scuttlebot">scuttlebot</a> on the secure-scuttlebutt network',
+  '',
+  'latest updates:'
 ].join('\n')
-msgs.push('<small>12/30 5:15pm</small>\nThings are going great here. How are you?')
 
 function onRequest(req, res) {
   res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Content-Security-Policy', 'default-src \'none\'; style-src \'unsafe-inline\'')
   res.writeHead(200)
-  res.end('<style>body { font-family: monospace; white-space: pre }</style>'+[banner].concat(msgs).join('\n\n'))
+  res.end('<style>body { font-family: monospace; white-space: pre-line; }</style>'+[banner].concat(msgs).join('\n\n\n\n'))
+}
+
+function pad0(v) {
+  v = ''+v
+  if (v.length < 2)
+    return '0'+v
+  return v
 }

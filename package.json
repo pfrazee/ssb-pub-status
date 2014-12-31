@@ -12,6 +12,7 @@
     "minimist": "~1.1.0",
     "multicb": "^1.0.0",
     "non-private-ip": "~1.1.0",
+    "pull-stream": "~2.24.1",
     "rc": "~0.5.4",
     "ssb-keys": "~0.4.1",
     "scuttlebot": "1.2.0"
