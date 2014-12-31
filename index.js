@@ -36,7 +36,7 @@ rpc.auth(ssbKeys.signObj(keys, {
   }, console.log))
 })
 
-var banner = [
+var bannerart = [
   '             .,ad88888888baa,',
   '        ,d8P"""        ""9888ba.',
   '     .a8"          ,ad88888888888a',
@@ -54,13 +54,17 @@ var banner = [
   '   V8,                 d88888888888"',
   '    `8b,             ,d8888888888P\'',
   '      `V8a,       ,ad8888888888P\'',
-  '         ""8888888888888888P"',
+  '         ""8888888888888888P"'
+].join('\n').replace(/ /g, '&nbsp;')
+
+var banner = [
+  bannerart,
   '',
   '<strong>Hello world, I am '+keys.id+'</strong>',
   'this pub server is running <a href="https://github.com/ssbc/scuttlebot">scuttlebot</a> on the secure-scuttlebutt network',
   '',
   'latest updates:'
-].join('\n').replace(/ /g, '&nbsp;')
+].join('\n')
 
 function onRequest(req, res) {
   res.setHeader('Content-Type', 'text/html')
