@@ -28,10 +28,10 @@ rpc.auth(ssbKeys.signObj(keys, {
   console.log('listening on', config.port)
 
   pull(rpc.createHistoryStream(keys.id, 0, true), pull.drain(function(msg) {
-    var d = new Date(msg.timestamp)
+    var d = new Date(msg.value.timestamp)
     var datestr = '<strong>'+(d.getMonth()+1)+'/'+pad0(d.getDate())+' '+d.getHours()+':'+pad0(d.getMinutes())+'</strong>\n\n'
-    if (msg.content.type == 'post' && msg.content.postType == 'text') {
-      msgs.unshift(datestr + msg.content.text)
+    if (msg.value.content.type == 'post') {
+      msgs.unshift(datestr + msg.value.content.text)
     }
   }, console.log))
 })
