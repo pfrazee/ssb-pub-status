@@ -43,13 +43,13 @@ var banner = [
   '<h1>Hello world, I am '+keys.id+'</h1>',
   '<h2> on <a href="https://github.com/ssbc/scuttlebot">the secure-scuttlebutt network</a></h2>',
   '',
-  '# I\'m a mail server for databases on scuttlebutt\'s cryptographic network.',
+  '# I\'m a caching server for synchronizing scuttlebutt instances across networks.',
   '# This page shows the feed of posts uploaded here.',
   '',
   '  (refresh to update)',
   '',
   '',
-  'If you want to join this server, <a href="https://github.com/ssbc/scuttlebot">install the scuttlebutt software</a> and get in touch with paul frazee.',
+  'If you want to be hosted by this server, <a href="https://github.com/ssbc/scuttlebot">install the scuttlebutt software</a> and get in touch with paul frazee.',
   '',
 ].join('\n')
 
