@@ -27,50 +27,37 @@ rpc.auth(ssbKeys.signObj(keys, {
   http.createServer(onRequest).listen(config.port)
   console.log('listening on', config.port)
 
-  pull(rpc.createHistoryStream(keys.id, 0, true), pull.drain(function(msg) {
+  pull(rpc.createFeedStream({ keys: true, live: true }), pull.drain(function(msg) {
     var d = new Date(msg.value.timestamp)
-    var datestr = '<strong>'+(d.getMonth()+1)+'/'+pad0(d.getDate())+' '+d.getHours()+':'+pad0(d.getMinutes())+'</strong>\n\n'
+    var datestr = '<h3 id="'+msg.key+'">'+
+      '<a href="#'+msg.key+'">'+(d.getMonth()+1)+'/'+pad0(d.getDate())+' '+d.getHours()+':'+pad0(d.getMinutes())+'</a>'+
+      ' - <a href="http://localhost:2000/#/msg/'+msg.key+'">&rarr;scuttlebot</a>'+
+    '</h3>'
     if (msg.value.content.type == 'post') {
       msgs.unshift(datestr + msg.value.content.text)
     }
   }, console.log))
 })
 
-var bannerart = [
-  '             .,ad88888888baa,',
-  '        ,d8P"""        ""9888ba.',
-  '     .a8"          ,ad88888888888a',
-  '    aP\'          ,88888888888888888a',
-  '  ,8"           ,88888888888888888888,',
-  ' ,8\'            (888888888( )888888888,',
-  ',8\'             `8888888888888888888888',
-  '8)               `888888888888888888888,',
-  '8                  "8888888888888888888)',
-  '8                   `888888888888888888)',
-  '8)                    "8888888888888888',
-  '(b                     "88888888888888\'',
-  '`8,        (8)          8888888888888)',
-  ' "8a                   ,888888888888)',
-  '   V8,                 d88888888888"',
-  '    `8b,             ,d8888888888P\'',
-  '      `V8a,       ,ad8888888888P\'',
-  '         ""8888888888888888P"'
-].join('\n').replace(/ /g, '&nbsp;')
-
 var banner = [
-  bannerart,
+  '<h1>Hello world, I am '+keys.id+'</h1>',
+  '<h2> on <a href="https://github.com/ssbc/scuttlebot">the secure-scuttlebutt network</a></h2>',
   '',
-  '<strong>Hello world, I am '+keys.id+'</strong>',
-  'this pub server is running <a href="https://github.com/ssbc/scuttlebot">scuttlebot</a> on the secure-scuttlebutt network',
+  '# I\'m a mail server for databases on scuttlebutt\'s cryptographic network.',
+  '# This page shows the feed of posts uploaded here.',
   '',
-  'latest updates:'
+  '  (refresh to update)',
+  '',
+  '',
+  'If you want to join this server, <a href="https://github.com/ssbc/scuttlebot">install the scuttlebutt software</a> and get in touch with paul frazee.',
+  '',
 ].join('\n')
 
 function onRequest(req, res) {
   res.setHeader('Content-Type', 'text/html')
   res.setHeader('Content-Security-Policy', 'default-src \'none\'; style-src \'unsafe-inline\'')
   res.writeHead(200)
-  res.end('<style>body { font-family: monospace; white-space: pre-line; }</style>'+[banner].concat(msgs).join('\n\n\n\n'))
+  res.end('<style>body { font-family: monospace; white-space: pre-line; } h1 { margin: 0; font-size: 4em } h2 { margin: 0; font-size: 2em }</style>'+[banner].concat(msgs).join('\n\n\n\n'))
 }
 
 function pad0(v) {
