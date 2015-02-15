@@ -26,7 +26,11 @@ rpc.auth(ssbKeys.signObj(keys, {
 
   http.createServer(onRequest).listen(config.port)
   console.log('listening on', config.port)
+  connect()
+})
 
+function connect() {
+  console.log('connection')
   pull(rpc.createFeedStream({ keys: true, live: true }), pull.drain(function(msg) {
     var d = new Date(msg.value.timestamp)
     var datestr = '<h3 id="'+msg.key+'">'+
@@ -36,8 +40,8 @@ rpc.auth(ssbKeys.signObj(keys, {
     if (msg.value.content.type == 'post') {
       msgs.unshift(datestr + msg.value.content.text)
     }
-  }, console.log))
-})
+  }, connect))
+}
 
 var banner = [
   '<h1>Hello world, I am '+keys.id+'</h1>',
